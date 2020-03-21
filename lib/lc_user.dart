@@ -382,10 +382,16 @@ class LCUser extends LCObject {
   /// 私有方法
   static Future<LCUser> _login(Map<String, dynamic> data) async {
     Map response = await LeanCloud._httpClient.postNoException('login', data: data);
-    _LCObjectData objectData = _LCObjectData.decode(response);
-    _currentUser = LCUser._fromObjectData(objectData);
-    await _saveToLocal();
-    return _currentUser;
+    if (response != null) {
+      _LCObjectData objectData = _LCObjectData.decode(
+          response);
+      _currentUser = LCUser._fromObjectData(
+          objectData);
+      await _saveToLocal(
+      );
+      return _currentUser;
+    }
+    return null;
   }
 
   static Future _saveToLocal() async {
